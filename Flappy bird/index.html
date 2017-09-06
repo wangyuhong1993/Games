@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <canvas width="800" height="500" style="border: 1px solid #000;">
+    
+    </canvas>
+    <script src="Game.js"></script>
+    <script src="Land.js"></script>
+    <script src="Sky.js"></script>
+    <script src="Bird.js"></script>
+    <script src="Pipe.js"></script>
+
+
+    <script>
+
+        var cs=document.querySelector('canvas');
+        var ctx=cs.getContext('2d');
+
+        /*
+        //小鸟运动函数
+        var img=new Image();  //创建图片对象
+        var startTime=new Date(); //开始时间
+        var endTime=0;  //运动结束时间
+        var Dvalue=0;  //时间差值
+        img.onload=function(){
+            //图片加载完成之后再去创建对象
+            var bird = new Bird({
+              ctx:ctx,
+              img:img,
+            });
+            setInterval(function(){
+              endTime=new Date();  
+              Dvalue=endTime-startTime; //时间间隔
+              startTime=endTime; //结束时间赋值给开始时间
+
+              ctx.clearRect(0,0,cs.width,cs.height);  //清除画布
+              //调用渲染函数
+              bird.rander(Dvalue);
+            },30)
+
+            //点击小鸟反弹
+            window.onclick=function(){
+              bird.speed=-0.3;  //点击加速度为-0.3,反方向运动
+            }
+        }
+        img.src="imgs/birds.png";  //添加图片地址*/
+
+        //2.陆地的绘制
+   /*     var img=new Image();
+        img.onload=function(){
+          //创建陆地信息
+          var land1=new Land({
+            ctx:ctx,
+            img:img,
+            index:0
+          });  
+          var land2=new Land({
+            ctx:ctx,
+            img:img,
+            index:1
+          }); 
+          var land3=new Land({
+            ctx:ctx,
+            img:img,
+            index:2
+          }); 
+          var land4=new Land({
+            ctx:ctx,
+            img:img,
+            index:3
+          }); 
+          setInterval(function(){
+            ctx.clearRect(0,0,cs.width,cs.height); //清除画布
+            //绘制陆地信息
+            land1.rander();
+            land2.rander();
+            land3.rander();
+            land4.rander();
+          },30);
+        }
+        img.src="imgs/land.png";*/
+
+       /* //3.天空的绘制
+        var img=new Image();
+        img.onload=function(){
+          //创建陆地信息
+          var sky1=new Land({
+            ctx:ctx,
+            img:img,
+            index:0
+          });  
+          var sky2=new Land({
+            ctx:ctx,
+            img:img,
+            index:1
+          }); 
+          var sky3=new Land({
+            ctx:ctx,
+            img:img,
+            index:2
+          }); 
+          setInterval(function(){
+            ctx.clearRect(0,0,cs.width,cs.height); //清除画布
+            //绘制陆地信息
+            sky1.rander();
+            sky2.rander();
+            sky3.rander();
+          },30);
+        }
+        img.src="imgs/sky.png";*/
+
+        //4.管道的绘制
+       /* var upImg=new Image(); //上管道图片
+        var downImg=new Image(); //下管道图片
+        upImg.onload=function(){
+          var pipe1=new Pipe({
+            ctx:ctx,
+            upImg:upImg,
+            downImg:downImg,
+            index:0
+          });
+          var pipe2=new Pipe({
+            ctx:ctx,
+            upImg:upImg,
+            downImg:downImg,
+            index:1
+          });
+          var pipe3=new Pipe({
+            ctx:ctx,
+            upImg:upImg,
+            downImg:downImg,
+            index:2
+          });
+          var pipe4=new Pipe({
+            ctx:ctx,
+            upImg:upImg,
+            downImg:downImg,
+            index:3
+          });
+          var pipe5=new Pipe({
+            ctx:ctx,
+            upImg:upImg,
+            downImg:downImg,
+            index:4
+          });
+          setInterval(function(){
+            ctx.clearRect(0,0,cs.width,cs.height);
+            pipe1.rander();
+            pipe2.rander();
+            pipe3.rander();
+            pipe4.rander();
+            pipe5.rander();
+          },30)
+         
+        }
+
+        upImg.src="imgs/pipe2.png";
+        downImg.src="imgs/pipe1.png";*/
+
+        //集成后：
+        var game=new Game({
+          ctx:ctx
+        });
+        game.start();  //开始游戏
+    </script>
+</body>
+</html>

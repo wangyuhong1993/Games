@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .layout{
+            width: 800px;
+            height: 600px;
+            border: 1px solid blue;
+            margin:100px auto;
+            position: relative;
+        }
+
+        .ball{
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background-color: red;
+            background-image:radial-gradient(at 5px 5px,rgba(0,0,0,0),rgba(0,0,0,0.5));
+            position : absolute;
+            left:100px;
+            top:400px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 容器 -->
+    <div class="layout"> 
+        <p class="ball"></p>
+    </div>
+</body>
+
+<script>
+    /*
+    * 4*10 个盒子   总宽度：800   盒子高:50;    *
+    *
+    * 小球动起来，碰撞检测
+    * */
+
+    //1.动态生成每个盒子的宽高(二维数组)
+    var ws=[[],[],[],[]];  
+
+    var boxs=[[],[],[],[]];
+    // 列数
+    var col=8;
+    // 行数
+    var row=4;
+    var H=50;
+
+    //随机颜色数组
+    var colors=['pink','yellow','#00ff66','green','red'];
+    
+    //2.box对象
+    function Box(row,col,w,x,y){
+        this.row=row;  //行数
+        this.col=col;  //列数
+        this.height=H; //盒子的高度
+        this.width=w; //盒子的宽度
+        this.x=x; //x,y盒子的x,y坐标
+        this.y=y; 
+        this.show=true;  //是否显示
+        this.bgc=parseInt(Math.random()*5);  //取随机颜色 
+
+        //绘制盒子
+        this.draw=function(){
+            var section=document.createElement("div");  //创建div盒子
+            section.style.width=this.width+"px";  //盒子的宽度
+            section.style.height=this.height+"px";  //盒子的高度
+            section.style.backgroundColor=colors[this.bgc]; //盒子的背景色
+            section.style.position="absolute";  //盒子绝对定位
+            section.style.left=this.x+"px";  //left、top值
+            section.style.top=this.y+"px";
+            section.style.BoxSizing="border-box";
+            section.style.border="1px solid blue";
+            document.querySelector(".layout").appendChild(section);
+        }
+
+        //碰撞检测
+        this.impactTest=function(aimX,aimY){
+            //如果小球是显示状态
+            if(this.show){
+                //当小球位于盒子内部时
+                if(aimX>this.x&&aimX<this.x+this.width&&aimY>this.y&&aimY<this.y+this.height){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        }
+    }
+
+    //3.随机生成前四列
+    for (var i = 0; i < row; i++) {
+        for (var j = 0; j < col/2; j++) {
+            ws[i][j]=50+parseInt(Math.random()*100);  //生成前四列（每个盒子的大小在50-150之间）
+        }
+    }
+    for (var i = 0; i < row; i++) {
+        for (var j = col/2; j < col; j++) {
+            //后四列依次匹配前面的盒子 规律：1+5=200,2+6=200
+            ws[i][j]=200-ws[i][j-col/2];
+        }
+    }
+    console.log(ws); //四层盒子宽度正常
+
+    //4.生成盒子数组
+    var sumWidth=0;
+    var sumHeight=0;
+    for (var i = 0; i < row; i++) {
+        for (var j = 0; j < col; j++) {
+            //当前行的盒子累加宽
+            sumWidth+=ws[i][j]
+            //当前行的累加高
+            sumHeight=i*50;
+            //临时盒子的行列，宽度，left,top值全部记录在其中
+            var temp=new Box(i,j,ws[i][j],sumWidth-ws[i][j],sumHeight);
+            boxs[i][j]=temp;
+        }
+        sumWidth=0;  //将sumWidth置零，方便下一行记录
+    }
+
+    //5.绘制盒子
+    for (var i = 0; i < row; i++) {
+        for (var j = 0; j < col; j++) {
+            boxs[i][j].draw();
+        }
+    }
+
+    //6.小球位移
+    var ball=document.querySelector(".ball");
+    var x=ball.offsetLeft;
+    var y=ball.offsetTop;
+
+    var stepX=5;
+    var stepY=5;
+    //添加定时器
+    setInterval(function(){
+        //小球的x,y的运动公式
+        x+=stepX;
+        y+=stepY;
+
+        // 极值判断
+        if(y>=600-25){
+            stepY=-7;
+        }
+        if(y<=25){
+            stepY=5;
+        }
+        if(x>=800-25){
+            stepX=-6;
+        }
+        if(x<=0){
+            stepX=5;
+        }
+
+        //遍历所有小球去碰撞检测
+        for (var i = 0; i < row; i++) {
+            for (var j = 0; j < col; j++) {
+                if (boxs[i][j].impactTest(x,y)) {
+                    stepY=3;
+                    boxs[i][j].show=false;
+                    document.querySelectorAll('.layout div')[i*8+j].style.display='none';
+                }
+            }
+        }
+
+        ball.style.left=x+"px";
+        ball.style.top=y+"px";
+    },20)
+
+
+</script>
+</html>
